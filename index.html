@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lohith Datta Varma Veepuri | AI Software Engineer</title>
+    <meta
+      name="description"
+      content="Lohith Veepuri — AI Software Engineer at Costco. 5+ years building distributed systems, cloud platforms, and AI/ML solutions. Java, Python, AWS, GCP."
+    />
+    <meta name="author" content="Lohith Datta Varma Veepuri" />
+    <meta property="og:title" content="Lohith Veepuri | AI Software Engineer" />
+    <meta
+      property="og:description"
+      content="Portfolio: distributed systems, AI/ML, cloud engineering. Open to new opportunities."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="images/profile.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Sans:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <meta property="og:image" content="images/profile.png" />
+  </head>
+  <body>
+    <a class="skip-link" href="#about">Skip to content</a>
+    <div class="nav-backdrop" id="nav-backdrop" hidden></div>
+    <header class="top-nav">
+      <div class="nav-inner">
+        <a href="#about" class="brand">
+          <span class="brand-icon">in</span>
+          <span class="brand-text">Lohith<span class="brand-dot">.</span>dev</span>
+        </a>
+        <nav class="nav-links" id="primary-nav" aria-label="Primary">
+          <a href="#about">About</a>
+          <a href="#experience">Experience</a>
+          <a href="#projects">Projects</a>
+          <a href="#skills">Skills</a>
+          <a href="#education">Education</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <a class="btn btn-primary nav-cta" href="Lohith_Veepuri_Main.pdf" download>
+          Resume PDF
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-nav" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="hero-stack">
+      <section class="profile-banner" aria-label="Profile banner">
+        <div class="banner-bg" aria-hidden="true"></div>
+        <div class="banner-glow-core" aria-hidden="true"></div>
+        <div class="banner-border" aria-hidden="true">
+          <div class="border-edge border-edge--top">
+            <div class="border-track border-track--lr" id="border-top"></div>
+          </div>
+          <div class="border-edge border-edge--right">
+            <div class="border-track border-track--tb" id="border-right"></div>
+          </div>
+          <div class="border-edge border-edge--bottom">
+            <div class="border-track border-track--rl" id="border-bottom"></div>
+          </div>
+          <div class="border-edge border-edge--left">
+            <div class="border-track border-track--bt" id="border-left"></div>
+          </div>
+        </div>
+        <div class="banner-inner">
+          <div class="banner-content">
+            <p class="banner-eyebrow">✦ AI · Agents · Cloud ✦</p>
+            <h2 class="banner-headline" id="banner-headline">AI Software Engineer</h2>
+            <p class="banner-subline" id="banner-subline"></p>
+          </div>
+        </div>
+      </section>
+
+      <div class="highlights-bar" id="highlights-bar" aria-label="Career highlights"></div>
+    </div>
+
+    <div class="page-layout">
+      <aside class="profile-sidebar reveal">
+        <div class="profile-card card-surface">
+          <span class="status-badge" aria-label="Open to work">Open to work</span>
+          <div class="avatar" id="avatar">
+            <img
+              src="images/profile.png"
+              alt="Lohith Datta Varma Veepuri"
+              width="256"
+              height="256"
+              loading="eager"
+            />
+          </div>
+          <h1 id="profile-name">Lohith Datta Varma Veepuri</h1>
+          <p class="headline" id="profile-headline"></p>
+          <p class="location" id="profile-location"></p>
+          <div class="profile-actions" id="profile-actions"></div>
+        </div>
+        <div class="sidebar-card open-to-card card-surface">
+          <h2>Target roles</h2>
+          <ul class="role-tags" id="role-tags"></ul>
+          <a href="#contact" class="btn btn-outline btn-block">Let's connect</a>
+        </div>
+      </aside>
+
+      <main class="feed" id="main-content">
+        <section id="about" class="feed-card card-surface reveal">
+          <header class="card-header">
+            <div class="card-title-wrap">
+              <span class="section-icon" aria-hidden="true">01</span>
+              <h2>About</h2>
+            </div>
+            <span class="card-meta">Professional summary</span>
+          </header>
+          <p class="recruiter-pitch" id="recruiter-pitch"></p>
+          <p id="about-text" class="about-text"></p>
+          <p class="tagline" id="profile-tagline"></p>
+        </section>
+
+        <section id="experience" class="feed-card card-surface reveal">
+          <header class="card-header">
+            <div class="card-title-wrap">
+              <span class="section-icon" aria-hidden="true">02</span>
+              <h2>Experience</h2>
+            </div>
+            <span class="card-meta" id="exp-count"></span>
+          </header>
+          <div id="experience-list" class="timeline"></div>
+        </section>
+
+        <section id="projects" class="feed-card card-surface reveal">
+          <header class="card-header">
+            <div class="card-title-wrap">
+              <span class="section-icon" aria-hidden="true">03</span>
+              <h2>Featured Projects</h2>
+            </div>
+            <span class="card-meta">AI · Full-Stack · Cloud</span>
+          </header>
+          <div id="projects-grid" class="projects-grid"></div>
+        </section>
+
+        <section id="skills" class="feed-card card-surface reveal">
+          <header class="card-header">
+            <div class="card-title-wrap">
+              <span class="section-icon" aria-hidden="true">04</span>
+              <h2>Skills</h2>
+            </div>
+            <span class="card-meta">Core stack</span>
+          </header>
+          <div id="skills-cloud" class="skills-cloud"></div>
+        </section>
+
+        <section id="education" class="feed-card card-surface reveal">
+          <header class="card-header">
+            <div class="card-title-wrap">
+              <span class="section-icon" aria-hidden="true">05</span>
+              <h2>Education</h2>
+            </div>
+            <span class="card-meta">Degrees</span>
+          </header>
+          <div id="education-list" class="edu-list"></div>
+        </section>
+
+        <section id="contact" class="feed-card card-surface reveal contact-section">
+          <header class="card-header">
+            <div class="card-title-wrap">
+              <span class="section-icon" aria-hidden="true">06</span>
+              <h2>Contact</h2>
+            </div>
+            <span class="card-meta">Direct reach</span>
+          </header>
+          <p class="contact-intro">Interested in collaborating? Reach out directly — I typically respond within 24 hours.</p>
+          <div id="contact-primary" class="contact-primary"></div>
+          <div id="contact-links" class="contact-links"></div>
+        </section>
+      </main>
+
+      <aside class="right-rail reveal">
+        <div class="rail-card card-surface">
+          <h3>At a glance</h3>
+          <ul class="rail-facts" id="rail-facts"></ul>
+        </div>
+        <div class="rail-card card-surface">
+          <h3>Top strengths</h3>
+          <ul id="rail-strengths" class="rail-list"></ul>
+        </div>
+        <div class="rail-card sticky-cta card-surface">
+          <h3>Get my resume</h3>
+          <p>Full PDF with experience, projects, and skills.</p>
+          <a href="Lohith_Veepuri_Main.pdf" download class="btn btn-primary btn-block">
+            Download PDF
+          </a>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p class="footer-copy">© <span id="year"></span> Lohith Datta Varma Veepuri</p>
+        <div class="footer-contact" id="footer-contact"></div>
+      </div>
+    </footer>
+
+    <div id="copilot-root" class="copilot-root">
+      <button
+        type="button"
+        class="copilot-fab"
+        id="copilot-toggle"
+        aria-expanded="false"
+        aria-controls="copilot-panel"
+        aria-label="Open Lohith's Copilot"
+      >
+        <span class="copilot-fab-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <path d="M12 3l1.8 5.4L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.6L12 3z" />
+            <path d="M8 19h8" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="copilot-fab-label">Copilot</span>
+      </button>
+
+      <section
+        id="copilot-panel"
+        class="copilot-panel"
+        hidden
+        aria-label="Lohith's Copilot chat"
+      >
+        <header class="copilot-header">
+          <div class="copilot-header-brand">
+            <span class="copilot-header-icon" aria-hidden="true">✦</span>
+            <div>
+              <h2 class="copilot-header-title">Lohith's Copilot</h2>
+              <p class="copilot-header-sub">AI · Portfolio assistant</p>
+            </div>
+          </div>
+          <div class="copilot-header-actions">
+            <button type="button" class="copilot-icon-btn" id="copilot-new-chat" title="New chat">
+              ↺
+            </button>
+            <button type="button" class="copilot-icon-btn" id="copilot-close" aria-label="Close chat">
+              ✕
+            </button>
+          </div>
+        </header>
+
+        <div class="copilot-messages" id="copilot-messages" role="log" aria-live="polite"></div>
+        <div class="copilot-prompts" id="copilot-prompts"></div>
+
+        <footer class="copilot-footer">
+          <p class="copilot-quota" id="copilot-quota"></p>
+          <p class="copilot-disclaimer">AI can make mistakes · Contact Lohith directly for important info</p>
+          <form class="copilot-form" id="copilot-form">
+            <textarea
+              id="copilot-input"
+              rows="2"
+              placeholder="Ask about projects, experience, skills…"
+              aria-label="Message to Copilot"
+            ></textarea>
+            <button type="submit" class="copilot-send" id="copilot-send" aria-label="Send message">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 2L11 13" stroke-linecap="round" />
+                <path d="M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </form>
+        </footer>
+      </section>
+    </div>
+
+    <script src="portfolio-data.js"></script>
+    <script src="copilot-config.js"></script>
+    <script src="icons.js"></script>
+    <script src="app.js"></script>
+    <script src="copilot.js"></script>
+  </body>
+</html>
