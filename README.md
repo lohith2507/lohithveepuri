@@ -1,6 +1,8 @@
 # Lohith Veepuri — Portfolio
 
-Personal portfolio site with **Lohith's Copilot** (NVIDIA Kimi API).
+Personal portfolio with **Lohith's Copilot** (NVIDIA Kimi API).
+
+**Live site:** https://lohithveepuri.vercel.app
 
 ## Local development
 
@@ -11,9 +13,58 @@ npm run dev
 
 Open http://localhost:3000
 
-## Deploy (Vercel)
+## Deploy with GitHub + Vercel
 
-- Production: https://lohithveepuri.vercel.app
-- Set `NVIDIA_API_KEY` in Vercel → Project → Environment Variables (never commit `.env.local`).
+### 1. Log in to GitHub (one time)
 
-Push to `main` on GitHub to trigger automatic Vercel deploys when the repo is connected.
+```powershell
+gh auth login
+```
+
+Choose: GitHub.com → HTTPS → Yes (authenticate Git) → Login with browser.
+
+### 2. Create repo and push
+
+From this folder:
+
+```powershell
+cd c:\Users\lohit\OneDrive\Desktop\portifolio
+gh repo create lohithveepuri --public --source=. --remote=origin --push
+```
+
+If the repo name is taken, pick another name and update the remote:
+
+```powershell
+git remote set-url origin https://github.com/lohith2507/YOUR-REPO-NAME.git
+git push -u origin main
+```
+
+### 3. Connect Vercel to GitHub
+
+**Option A — Dashboard**
+
+1. https://vercel.com/lohithdattavarmaveepuri-2248s-projects/lohithveepuri/settings/git
+2. **Connect Git Repository** → select `lohith2507/lohithveepuri`
+3. Production branch: `main`
+
+**Option B — CLI**
+
+```powershell
+npx vercel git connect https://github.com/lohith2507/lohithveepuri.git
+```
+
+### 4. Environment variable (required for Copilot)
+
+Vercel → **lohithveepuri** → **Settings** → **Environment Variables**
+
+| Name | Value |
+|------|--------|
+| `NVIDIA_API_KEY` | Your NVIDIA API key |
+
+Apply to **Production**, **Preview**, and **Development**. Redeploy after adding.
+
+---
+
+**Never commit** `.env.local` — it is in `.gitignore`.
+
+After Git is connected, every `git push` to `main` deploys automatically.
