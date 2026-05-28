@@ -5,7 +5,7 @@ const { COPILOT_DAILY_LIMIT } = require("../copilot-config.js");
 const COOKIE_NAME = "lohit_copilot";
 const MAX_PER_DAY = COPILOT_DAILY_LIMIT;
 const MAX_HISTORY = 4;
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash-lite";
 const LLM_TIMEOUT_MS = 20000;
 
 function todayUtc() {
@@ -80,8 +80,12 @@ async function callGemini(apiKey, systemPrompt, history, message) {
     const data = await llmRes.json();
 
     if (!llmRes.ok) {
-      const msg =
+      let msg =
         data?.error?.message || data?.message || "Gemini API request failed";
+      if (/quota|rate.?limit|429/i.test(msg)) {
+        msg =
+          "Copilot is temporarily unavailable (API quota limit). Please try again in a minute or contact Lohith directly.";
+      }
       return { ok: false, status: llmRes.status, error: msg };
     }
 
