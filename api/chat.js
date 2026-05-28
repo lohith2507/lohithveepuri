@@ -5,7 +5,8 @@ const { COPILOT_DAILY_LIMIT } = require("../copilot-config.js");
 const COOKIE_NAME = "lohit_copilot";
 const MAX_PER_DAY = COPILOT_DAILY_LIMIT;
 const MAX_HISTORY = 4;
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash-lite";
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+const MODEL = process.env.GROQ_MODEL || "llama-3.1-8b-instant";
 const LLM_TIMEOUT_MS = 20000;
 
 function todayUtc() {
@@ -37,43 +38,40 @@ function json(res, status, body, extraHeaders = {}) {
   res.end(JSON.stringify(body));
 }
 
-function toGeminiContents(history, message) {
-  const contents = [];
+function toChatMessages(systemPrompt, history, message) {
+  const messages = [{ role: "system", content: systemPrompt }];
   for (const msg of (history || []).slice(-MAX_HISTORY)) {
     if (!msg?.content?.trim()) continue;
-    const role = msg.role === "assistant" ? "model" : "user";
-    contents.push({ role, parts: [{ text: msg.content.trim() }] });
+    const role = msg.role === "assistant" ? "assistant" : "user";
+    messages.push({ role, content: msg.content.trim() });
   }
-  contents.push({ role: "user", parts: [{ text: message.trim() }] });
-  return contents;
+  messages.push({ role: "user", content: message.trim() });
+  return messages;
 }
 
 function extractReply(data) {
-  const reply =
-    data?.candidates?.[0]?.content?.parts
-      ?.map((p) => p.text)
-      .filter(Boolean)
-      .join("") || "";
-  return reply.trim() || null;
+  const content = data?.choices?.[0]?.message?.content;
+  if (typeof content === "string" && content.trim()) return content.trim();
+  return null;
 }
 
-async function callGemini(apiKey, systemPrompt, history, message) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+async function callGroq(apiKey, systemPrompt, history, message) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), LLM_TIMEOUT_MS);
 
   try {
-    const llmRes = await fetch(url, {
+    const llmRes = await fetch(GROQ_URL, {
       method: "POST",
       signal: controller.signal,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        contents: toGeminiContents(history, message),
-        generationConfig: {
-          temperature: 0.5,
-          maxOutputTokens: 512,
-        },
+        model: MODEL,
+        messages: toChatMessages(systemPrompt, history, message),
+        max_tokens: 512,
+        temperature: 0.4,
       }),
     });
 
@@ -81,10 +79,12 @@ async function callGemini(apiKey, systemPrompt, history, message) {
 
     if (!llmRes.ok) {
       let msg =
-        data?.error?.message || data?.message || "Gemini API request failed";
+        data?.error?.message ||
+        (typeof data?.error === "string" ? data.error : null) ||
+        "Groq API request failed";
       if (/quota|rate.?limit|429/i.test(msg)) {
         msg =
-          "Copilot is temporarily unavailable (API quota limit). Please try again in a minute or contact Lohith directly.";
+          "Copilot is temporarily unavailable (rate limit). Please try again in a minute.";
       }
       return { ok: false, status: llmRes.status, error: msg };
     }
@@ -130,9 +130,9 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    json(res, 500, { error: "Copilot is not configured. Missing GEMINI_API_KEY." });
+    json(res, 500, { error: "Copilot is not configured. Missing GROQ_API_KEY." });
     return;
   }
 
@@ -185,7 +185,7 @@ module.exports = async function handler(req, res) {
   const systemPrompt = buildCopilotSystemPrompt(PORTFOLIO_DATA);
 
   try {
-    const result = await callGemini(apiKey, systemPrompt, body.history, message);
+    const result = await callGroq(apiKey, systemPrompt, body.history, message);
 
     if (!result.ok) {
       json(res, result.status >= 500 ? 502 : 400, { error: result.error });

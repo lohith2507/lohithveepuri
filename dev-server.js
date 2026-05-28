@@ -1,6 +1,6 @@
 /**
  * Local dev server: static portfolio + /api/chat (same handler as Vercel).
- * Run: npm run dev  (requires .env.local with GEMINI_API_KEY)
+ * Run: npm run dev  (requires .env.local with GROQ_API_KEY)
  */
 const http = require("http");
 const fs = require("fs");
@@ -116,13 +116,13 @@ server.listen(PORT, () => {
   console.log("  Portfolio dev server");
   console.log(`  → http://localhost:${PORT}`);
   console.log("");
-  if (!process.env.GEMINI_API_KEY) {
-    console.log("  ⚠  GEMINI_API_KEY missing — Copilot will not work.");
+  if (!process.env.GROQ_API_KEY) {
+    console.log("  ⚠  GROQ_API_KEY missing — Copilot will not work.");
     console.log("     Copy .env.example to .env.local and add your key.");
   } else if (!hasEnv) {
-    console.log("  ✓  GEMINI_API_KEY loaded from environment");
+    console.log("  ✓  GROQ_API_KEY loaded from environment");
   } else {
-    console.log("  ✓  GEMINI_API_KEY loaded from .env.local");
+    console.log("  ✓  GROQ_API_KEY loaded from .env.local");
   }
   console.log("");
   console.log("  Press Ctrl+C to stop");

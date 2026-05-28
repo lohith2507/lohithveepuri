@@ -1,13 +1,13 @@
 # Lohith Veepuri — Portfolio
 
-Personal portfolio with **Lohith's Copilot** (Google Gemini).
+Personal portfolio with **Lohith's Copilot** (Groq LLM).
 
 **Live site:** https://lohithveepuri.vercel.app
 
 ## Local development
 
 ```bash
-cp .env.example .env.local   # add GEMINI_API_KEY
+cp .env.example .env.local   # add GROQ_API_KEY
 npm run dev
 ```
 
@@ -59,7 +59,7 @@ Vercel → **lohithveepuri** → **Settings** → **Environment Variables**
 
 | Name | Value |
 |------|--------|
-| `GEMINI_API_KEY` | Your Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey) |
+| `GROQ_API_KEY` | Your Groq API key from [console.groq.com](https://console.groq.com/keys) |
 
 Apply to **Production**, **Preview**, and **Development**. Redeploy after adding.
 
