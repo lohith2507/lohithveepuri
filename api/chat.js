@@ -4,9 +4,10 @@ const { COPILOT_DAILY_LIMIT } = require("../copilot-config.js");
 
 const COOKIE_NAME = "lohit_copilot";
 const MAX_PER_DAY = COPILOT_DAILY_LIMIT;
-const MAX_HISTORY = 6;
+const MAX_HISTORY = 4;
 const NVIDIA_URL = "https://integrate.api.nvidia.com/v1/chat/completions";
-const MODEL = "moonshotai/kimi-k2.6";
+const MODEL = process.env.NVIDIA_MODEL || "meta/llama-3.1-8b-instruct";
+const LLM_TIMEOUT_MS = 20000;
 
 function todayUtc() {
   return new Date().toISOString().slice(0, 10);
@@ -53,6 +54,55 @@ function extractReply(data) {
   const content = data?.choices?.[0]?.message?.content;
   if (typeof content === "string" && content.trim()) return content.trim();
   return "I couldn't generate a response. Please try again.";
+}
+
+async function callNvidia(apiKey, messages) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), LLM_TIMEOUT_MS);
+
+  try {
+    const llmRes = await fetch(NVIDIA_URL, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages,
+        max_tokens: 400,
+        temperature: 0.4,
+        top_p: 0.9,
+        stream: false,
+      }),
+    });
+
+    const data = await llmRes.json();
+
+    if (!llmRes.ok) {
+      const msg =
+        data?.error?.message ||
+        (typeof data?.error === "string" ? data.error : null) ||
+        data?.message ||
+        "NVIDIA API request failed";
+      return { ok: false, status: llmRes.status, error: msg };
+    }
+
+    return { ok: true, reply: extractReply(data) };
+  } catch (err) {
+    if (err.name === "AbortError") {
+      return {
+        ok: false,
+        status: 504,
+        error: "Copilot took too long to respond. Please try a shorter question.",
+      };
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -127,43 +177,22 @@ module.exports = async function handler(req, res) {
   const systemPrompt = buildCopilotSystemPrompt(PORTFOLIO_DATA);
 
   try {
-    const llmRes = await fetch(NVIDIA_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: toChatMessages(systemPrompt, body.history, message),
-        max_tokens: 512,
-        temperature: 0.5,
-        top_p: 0.9,
-        stream: false,
-        chat_template_kwargs: { thinking: false },
-      }),
-    });
+    const result = await callNvidia(
+      apiKey,
+      toChatMessages(systemPrompt, body.history, message)
+    );
 
-    const data = await llmRes.json();
-
-    if (!llmRes.ok) {
-      const msg =
-        data?.error?.message ||
-        (typeof data?.error === "string" ? data.error : null) ||
-        data?.message ||
-        "NVIDIA API request failed";
-      json(res, llmRes.status >= 500 ? 502 : 400, { error: msg });
+    if (!result.ok) {
+      json(res, result.status >= 500 ? 502 : 400, { error: result.error });
       return;
     }
 
-    const reply = extractReply(data);
     const nextUsage = { date: todayUtc(), count: usage.count + 1 };
     json(
       res,
       200,
       {
-        reply,
+        reply: result.reply,
         remaining: Math.max(0, MAX_PER_DAY - nextUsage.count),
         limit: MAX_PER_DAY,
       },
