@@ -102,7 +102,7 @@ var PORTFOLIO_DATA = {
       glow: "#f472b6",
     },
   ],
-  resumePdf: "Lohith_Veepuri_Main.pdf",
+  resumePdf: "Lohith_Veepuri_SDE.pdf",
   links: {
     leetcode: "https://leetcode.com/u/lohithv2507/",
     linkedin: "https://www.linkedin.com/in/lohithveepuri/",
