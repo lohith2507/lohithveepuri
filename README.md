@@ -1,13 +1,13 @@
 # Lohith Veepuri — Portfolio
 
-Personal portfolio with **Lohith's Copilot** (NVIDIA Kimi API).
+Personal portfolio with **Lohith's Copilot** (Google Gemini).
 
 **Live site:** https://lohithveepuri.vercel.app
 
 ## Local development
 
 ```bash
-cp .env.example .env.local   # add NVIDIA_API_KEY
+cp .env.example .env.local   # add GEMINI_API_KEY
 npm run dev
 ```
 
@@ -59,7 +59,7 @@ Vercel → **lohithveepuri** → **Settings** → **Environment Variables**
 
 | Name | Value |
 |------|--------|
-| `NVIDIA_API_KEY` | Your NVIDIA API key |
+| `GEMINI_API_KEY` | Your Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey) |
 
 Apply to **Production**, **Preview**, and **Development**. Redeploy after adding.
 
