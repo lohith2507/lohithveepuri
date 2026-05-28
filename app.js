@@ -25,6 +25,15 @@
     return /present/i.test(period);
   }
 
+  function initResumeLinks() {
+    const pdf = D.resumePdf;
+    if (!pdf) return;
+    document.querySelectorAll("[data-resume-link]").forEach((a) => {
+      a.href = pdf;
+      a.setAttribute("download", "");
+    });
+  }
+
   function statPillsHtml() {
     return D.stats
       .map(
@@ -372,6 +381,7 @@
   }
 
   function init() {
+    initResumeLinks();
     renderBanner();
     renderHighlights();
     renderProfile();
