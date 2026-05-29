@@ -1,5 +1,9 @@
 const { PORTFOLIO_DATA } = require("../portfolio-data.js");
-const { buildCopilotSystemPrompt } = require("../copilot-context.js");
+const {
+  buildCopilotSystemPrompt,
+  isLikelyAboutLohith,
+  OFF_TOPIC_SYSTEM,
+} = require("../copilot-context.js");
 const { COPILOT_DAILY_LIMIT } = require("../copilot-config.js");
 
 const COOKIE_NAME = "lohit_copilot";
@@ -55,7 +59,7 @@ function extractReply(data) {
   return null;
 }
 
-async function callGroq(apiKey, systemPrompt, history, message) {
+async function callGroq(apiKey, systemPrompt, history, message, maxTokens = 512) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), LLM_TIMEOUT_MS);
 
@@ -70,8 +74,8 @@ async function callGroq(apiKey, systemPrompt, history, message) {
       body: JSON.stringify({
         model: MODEL,
         messages: toChatMessages(systemPrompt, history, message),
-        max_tokens: 512,
-        temperature: 0.4,
+        max_tokens: maxTokens,
+        temperature: 0.3,
       }),
     });
 
@@ -182,10 +186,21 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const systemPrompt = buildCopilotSystemPrompt(PORTFOLIO_DATA);
+  const aboutLohith = isLikelyAboutLohith(message);
+  const systemPrompt = aboutLohith
+    ? buildCopilotSystemPrompt(PORTFOLIO_DATA)
+    : OFF_TOPIC_SYSTEM;
+  const history = aboutLohith ? body.history : [];
+  const maxTokens = aboutLohith ? 512 : 90;
 
   try {
-    const result = await callGroq(apiKey, systemPrompt, body.history, message);
+    const result = await callGroq(
+      apiKey,
+      systemPrompt,
+      history,
+      message,
+      maxTokens
+    );
 
     if (!result.ok) {
       json(res, result.status >= 500 ? 502 : 400, { error: result.error });

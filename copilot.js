@@ -106,7 +106,7 @@
     els.messages.innerHTML = "";
     appendMessage(
       "assistant",
-      `Hi! I'm Lohith's Copilot 👋\n\nAsk me anything about his experience, projects, skills, or how to get in touch.`
+      `Hi! I'm Lohith's Copilot 👋\n\nI only answer questions about Lohith — his experience, projects, skills, education, and contact info. Ask away!`
     );
     renderPrompts();
   }
